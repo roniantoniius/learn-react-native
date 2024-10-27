@@ -1,25 +1,27 @@
 import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import colors from '../misc/colors';
 
-const SearchBar = ({containerStyle}) => {
-    return (
-        <View style={[styles.container, {...containerStyle}]}>
-            <TextInput style={styles.SearchBar} placeholder='Search here..' />
-        </View>
-    );
-}
+const RoundIconBtn = ({ antIconName, size, color, style, onPress }) => {
+  return (
+    <AntDesign
+      name={antIconName}
+      size={size || 24}
+      color={color || colors.LIGHT}
+      style={[styles.icon, { ...style }]}
+      onPress={onPress}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
-    SearchBar: {
-        borderColor: colors.PRIMARY,
-        borderWidth: 1,
-        height: 40,
-        borderRadius: 40,
-        paddingLeft: 15,
-        fontSize: 18,
-    },
-    container: {}
-})
+  icon: {
+    backgroundColor: colors.PRIMARY,
+    padding: 15,
+    borderRadius: 50,
+    elevation: 5,
+  },
+});
 
-export default SearchBar;
+export default RoundIconBtn;

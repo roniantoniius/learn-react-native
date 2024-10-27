@@ -1,42 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
-import Intro from './app/screens/Intro';
-import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NoteScreen from './app/screens/NoteScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+import Intro from './app/screens/Intro';
 import NoteScreen from './app/screens/NoteScreen';
 import NoteDetail from './app/components/NoteDetail';
-
+import NoteProvider from './app/contexts/NoteProvider';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState({});
+  const [isAppFirstTimeOpen, setIsAppFirstTimeOpen] = useState(false);
   const findUser = async () => {
     const result = await AsyncStorage.getItem('user');
-    if (result !== null){
-      setUser(JSON.parse(result));
-    }
+
+    if (result === null) return setIsAppFirstTimeOpen(true);
+
+    setUser(JSON.parse(result));
+    setIsAppFirstTimeOpen(false);
   };
 
   useEffect(() => {
     findUser();
   }, []);
 
-  const renderNoteScreen = () => <NoteScreen {...props} user={user} />;
+  const renderNoteScreen = props => <NoteScreen {...props} user={user} />;
 
-  if (!user.name) return <Intro onFinish={findUser} />;
+  if (isAppFirstTimeOpen) return <Intro onFinish={findUser} />;
   return (
-  <NavigationContainer>
-    <Stack.Navigator screenOptions={{ headerTitle: '', headerTransparent: true}}>
-      <Stack.Screen name="NoteScreen" component={renderNoteScreen} />
-      <Stack.Screen name="NoteDetail" component={NoteDetail} />
-    </Stack.Navigator>
-  </NavigationContainer>
+    <NavigationContainer>
+      <NoteProvider>
+        <Stack.Navigator
+          screenOptions={{ headerTitle: '', headerTransparent: true }}
+        >
+          <Stack.Screen component={renderNoteScreen} name='NoteScreen' />
+          <Stack.Screen component={NoteDetail} name='NoteDetail' />
+        </Stack.Navigator>
+      </NoteProvider>
+    </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

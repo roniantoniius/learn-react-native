@@ -3,4 +3,5 @@ export default {
     LIGHT: '#FFF',
     PRIMARY: '#dbb2ff',
     ERROR: '#ff0000',
-}
+  };
+  
