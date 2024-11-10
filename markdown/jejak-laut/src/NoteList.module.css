@@ -1,10 +1,22 @@
 .card {
-    transition: translate ease-in-out100ms, box-shadow ease-in-out 100ms;
-  }
-  
-  .card:hover,
-  .card:focus {
-    translate: 0 -5px;
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2);
-  }
-  
+  transition: translate ease-in-out 100ms, box-shadow ease-in-out 100ms;
+}
+
+.card:hover,
+.card:focus {
+  translate: 0 -5px;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.horizontalDivider {
+  border-top: 1px solid #333131;
+  margin: 16px 0;
+}
+
+.markdownContainer {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
