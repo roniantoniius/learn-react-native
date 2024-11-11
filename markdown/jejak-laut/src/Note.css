@@ -1,0 +1,40 @@
+.custom-tag {
+    background-color: #052844 !important;
+    color: white !important;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.custom-small {
+    color: #052844 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 590;
+}
+
+.custom-medium {
+    color: #052844 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+
+.custom-judul {
+    color: #052844 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.custom-button {
+    background-color: #052844 !important;
+    color: #c9ecff !important;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.custom-button:hover {
+    background-color: #B6E5FF !important;
+    color: #052844 !important;
+}

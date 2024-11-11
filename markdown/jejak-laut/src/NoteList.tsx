@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Tag } from "./App";
 import styles from "./NoteList.module.css";
+import './Note.css';
 
 type SimplifiedNote = {
   tags: Tag[];
@@ -62,27 +63,31 @@ export function NoteList({
     <>
       <Row className="align-items-center mb-4">
         <Col>
-          <h1>Jejak Laut</h1>
+          <Stack direction="horizontal" gap={2}>
+            <img src="/logo1.svg" alt="Logo" style={{ width: '40px', height: '40px'}} />
+            <h1 style={{ fontSize: '1.5em', margin: 0 }} className="custom-judul">Jejak Laut</h1>
+          </Stack>
         </Col>
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
             <Link to="/new">
-              <Button variant="primary">Tambah</Button>
+              <Button variant="primary custom-button">Tambah</Button>
             </Link>
             <Button
               onClick={() => setEditTagsModalIsOpen(true)}
-              variant="outline-secondary"
+              variant="outline-secondary text"
             >
-              Edit Tags
+              Perbarui Kategori
             </Button>
           </Stack>
         </Col>
       </Row>
+      <hr className={styles.horizontalDivider} />
       <Form>
         <Row className="mb-4">
           <Col>
             <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
+              <Form.Label className="custom-small">Cari judul catatan kamu!</Form.Label>
               <Form.Control
                 type="text"
                 value={title}
@@ -92,8 +97,8 @@ export function NoteList({
           </Col>
           <Col>
             <Form.Group controlId="tags">
-              <Form.Label>Tags</Form.Label>
-              <ReactSelect
+              <Form.Label className="custom-small">Kategori</Form.Label>
+              <ReactSelect className="text"
                 value={selectedTags.map((tag) => {
                   return { label: tag.label, value: tag.id };
                 })}
@@ -113,7 +118,7 @@ export function NoteList({
           </Col>
         </Row>
       </Form>
-      <Row xs={1} sm={2} lg={3} xl={4} className="g-3">
+      <Row xs={1} sm={2} lg={3} xl={2} className="g-3">
         {filteredNotes.map((note) => (
           <Col key={note.id}>
             <NoteCard id={note.id} title={note.title} tags={note.tags} />
@@ -143,15 +148,15 @@ function NoteCard({ id, title, tags }: SimplifiedNote) {
           gap={2}
           className="align-items-center justify-content-center h-100"
         >
-          <span className="fs-5">{title}</span>
+          <span className="fs-5 custom-medium">{title}</span>
           {tags.length > 0 && (
             <Stack
-              gap={1}
+              gap={2}
               direction="horizontal"
               className="justify-content-center flex-wrap"
             >
               {tags.map((tag) => (
-                <Badge key={tag.id} className="text-truncate">
+                <Badge key={tag.id} className="custom-tag text-truncate">
                   {" "}
                   {tag.label}
                 </Badge>
@@ -174,7 +179,7 @@ function EditTagsModal({
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Ubah Kategori</Modal.Title>
+        <Modal.Title className="custom-text-color custom-medium">Ubah Kategori</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>

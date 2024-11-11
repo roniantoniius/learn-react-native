@@ -16,11 +16,11 @@ export function Note({ onDelete }: NoteProps) {
     <>
       <Row className="align-items-center mb-4">
         <Col>
-          <h1>{note.title}</h1>
+          <h1 className="custom-medium">{note.title}</h1>
           {note.tags.length > 0 && (
             <Stack gap={1} direction="horizontal" className="flex-wrap">
               {note.tags.map((tag) => (
-                <Badge key={tag.id} className="text-truncate">
+                <Badge key={tag.id} className="text-truncate custom-tag">
                   {tag.label}
                 </Badge>
               ))}
@@ -30,19 +30,19 @@ export function Note({ onDelete }: NoteProps) {
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
             <Link to={`/${note.id}/edit`}>
-              <Button variant="primary">Ubah</Button>
+              <Button variant="primary custom-button">Ubah</Button>
             </Link>
             <Button
               onClick={() => {
                 onDelete(note.id);
                 navigate("/");
               }}
-              variant="outline-danger"
+              variant="outline-danger text"
             >
               Hapus
             </Button>
             <Link to="/">
-              <Button variant="outline-secondary">Kembali</Button>
+              <Button variant="outline-secondary text">Kembali</Button>
             </Link>
           </Stack>
         </Col>

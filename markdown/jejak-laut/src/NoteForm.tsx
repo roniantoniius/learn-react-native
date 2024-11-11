@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
 import { NoteData, Tag } from "./App";
 import { v4 as uuidV4 } from "uuid";
+import './Note.css';
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -42,14 +43,14 @@ export function NoteForm({
         <Row>
           <Col>
             <Form.Group controlId="title">
-              <Form.Label>Judul</Form.Label>
-              <Form.Control ref={titleRef} required defaultValue={title} />
+              <Form.Label className="custom-small">Judul</Form.Label>
+              <Form.Control className="text" ref={titleRef} required defaultValue={title} />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="tags">
-              <Form.Label>Kategori</Form.Label>
-              <CreatableReactSelect
+              <Form.Label className="custom-small">Kategori</Form.Label>
+              <CreatableReactSelect className="text"
                 onCreateOption={(label) => {
                   const newTag = { id: uuidV4(), label };
                   onAddTag(newTag);
@@ -74,9 +75,9 @@ export function NoteForm({
           </Col>
         </Row>
         <Col>
-          <Form.Group controlId="markdown">
-            <Form.Label>Badan Catatan</Form.Label>
-            <Form.Control
+          <Form.Group controlId="markdown" className="mb-3">
+            <Form.Label className="text custom-small">Badan Catatan</Form.Label>
+            <Form.Control className="text"
               defaultValue={markdown}
               required
               as="textarea"
@@ -84,13 +85,13 @@ export function NoteForm({
               rows={15}
             />
           </Form.Group>
-          <Stack direction="horizontal" gap={2} className="justify-content-end">
-            <Button type="submit" variant="primary">
-              Save
+          <Stack direction="horizontal" gap={2} className="justify-content-end mt-3">
+            <Button type="submit" variant="primary custom-button">
+              Simpan
             </Button>
             <Link to="..">
-              <Button type="button" variant="outline-secondary">
-                Cancel
+              <Button type="button" variant="outline-secondary text">
+                Batal
               </Button>
             </Link>
           </Stack>
