@@ -2,9 +2,9 @@ import { Col, Row, Form, Stack, Button } from "react-bootstrap";
 import CreatableReactSelect from "react-select/creatable";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useRef, useState } from "react";
-import { NoteData, Tag } from "./App";
+import { NoteData, Tag } from "../App";
 import { v4 as uuidV4 } from "uuid";
-import './Note.css';
+import '../styles/Note.css';
 
 type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
@@ -19,9 +19,13 @@ export function NoteForm({
   title = "",
   markdown = "",
   tags = [],
+  longitude = 0,
+  latitude = 0,
 }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
+  const longitudeRef = useRef<HTMLInputElement>(null);
+  const latitudeRef = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   const navigate = useNavigate();
 
@@ -32,6 +36,8 @@ export function NoteForm({
       title: titleRef.current!.value,
       markdown: markdownRef.current!.value,
       tags: selectedTags,
+      longitude: parseFloat(longitudeRef.current!.value),
+      latitude: parseFloat(latitudeRef.current!.value),
     });
 
     navigate("..");
@@ -96,6 +102,30 @@ export function NoteForm({
             </Link>
           </Stack>
         </Col>
+        <Row>
+          <Col>
+            <Form.Group controlId="latitude">
+              <Form.Label>Latitude</Form.Label>
+              <Form.Control
+                type="number"
+                step="any"
+                ref={latitudeRef}
+                defaultValue={latitude}
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="longitude">
+              <Form.Label>Longitude</Form.Label>
+              <Form.Control
+                type="number"
+                step="any"
+                ref={longitudeRef}
+                defaultValue={longitude}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
       </Stack>
     </Form>
   );

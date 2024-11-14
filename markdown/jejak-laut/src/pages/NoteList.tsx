@@ -11,14 +11,16 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
-import { Tag } from "./App";
-import styles from "./NoteList.module.css";
-import './Note.css';
+import { Tag } from "../App";
+import styles from "../styles/NoteList.module.css";
+import '../styles/Note.css';
 
 type SimplifiedNote = {
   tags: Tag[];
   title: string;
   id: string;
+  longitude: number;
+  latitude: number;
 };
 
 type NoteListProps = {
@@ -64,7 +66,7 @@ export function NoteList({
       <Row className="align-items-center mb-4">
         <Col>
           <Stack direction="horizontal" gap={2}>
-            <img src="/logo1.svg" alt="Logo" style={{ width: '40px', height: '40px'}} />
+            <img src="/dark-nobg.svg" alt="Logo" style={{ width: '40px', height: '40px'}} />
             <h1 style={{ fontSize: '1.5em', margin: 0 }} className="custom-judul">Jejak Laut</h1>
           </Stack>
         </Col>
@@ -87,7 +89,7 @@ export function NoteList({
         <Row className="mb-4">
           <Col>
             <Form.Group controlId="title">
-              <Form.Label className="custom-small">Cari judul catatan kamu!</Form.Label>
+              <Form.Label className="custom-medium">Cari judul catatan kamu!</Form.Label>
               <Form.Control
                 type="text"
                 value={title}
@@ -97,7 +99,7 @@ export function NoteList({
           </Col>
           <Col>
             <Form.Group controlId="tags">
-              <Form.Label className="custom-small">Kategori</Form.Label>
+              <Form.Label className="custom-medium">Kategori</Form.Label>
               <ReactSelect className="text"
                 value={selectedTags.map((tag) => {
                   return { label: tag.label, value: tag.id };
@@ -121,7 +123,7 @@ export function NoteList({
       <Row xs={1} sm={2} lg={3} xl={2} className="g-3">
         {filteredNotes.map((note) => (
           <Col key={note.id}>
-            <NoteCard id={note.id} title={note.title} tags={note.tags} />
+            <NoteCard id={note.id} title={note.title} tags={note.tags} latitude={note.latitude} longitude={note.longitude} />
           </Col>
         ))}
       </Row>
@@ -136,7 +138,7 @@ export function NoteList({
   );
 }
 
-function NoteCard({ id, title, tags }: SimplifiedNote) {
+function NoteCard({ id, title, tags, longitude, latitude }: SimplifiedNote) {
   return (
     <Card
       as={Link}
@@ -150,7 +152,7 @@ function NoteCard({ id, title, tags }: SimplifiedNote) {
         >
           <span className="fs-5 custom-medium">{title}</span>
           {tags.length > 0 && (
-            <Stack
+            <><Stack
               gap={2}
               direction="horizontal"
               className="justify-content-center flex-wrap"
@@ -162,6 +164,8 @@ function NoteCard({ id, title, tags }: SimplifiedNote) {
                 </Badge>
               ))}
             </Stack>
+                <h5 className="fs-5 custom-very-small">{latitude}, {longitude}</h5>
+              </>
           )}
         </Stack>
       </Card.Body>

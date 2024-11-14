@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { NewNote } from "./NewNote";
-import { useLocalStorage } from "./useLocalStorage";
+import { NewNote } from "./pages/NewNote";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
-import { NoteList } from "./NoteList";
-import { Note } from "./Note";
-import { NoteLayout } from "./NoteLayout";
-import { EditNote } from "./EditNote";
+import { NoteList } from "./pages/NoteList";
+import { Note } from "./pages/Note";
+import { NoteLayout } from "./layouts/NoteLayout";
+import { EditNote } from "./pages/EditNote";
 
 export type Note = {
   id: string;
@@ -22,12 +22,16 @@ export type RawNoteData = {
   title: string;
   markdown: string;
   tagIds: string[];
+  longitude: number;
+  latitude: number;
 };
 
 export type NoteData = {
   title: string;
   markdown: string;
   tags: Tag[];
+  longitude: number;
+  latitude: number;
 };
 
 export type Tag = {
@@ -48,13 +52,17 @@ function App() {
     });
   }, [notes, tags]);
 
-  function onCreateNote({ tags, ...data }: NoteData) {
-    setNotes((prevNotes) => {
-      return [
-        ...prevNotes,
-        { ...data, id: uuidV4(), tagIds: tags.map((tag) => tag.id) },
-      ];
-    });
+  function onCreateNote({ tags, longitude, latitude, ...data }: NoteData) {
+    setNotes((prevNotes) => [
+      ...prevNotes,
+      {
+        id: uuidV4(),
+        ...data,
+        longitude,
+        latitude,
+        tagIds: tags.map((tag) => tag.id),
+      },
+    ]);
   }
 
   function onUpdateNote(id: string, { tags, ...data }: NoteData) {

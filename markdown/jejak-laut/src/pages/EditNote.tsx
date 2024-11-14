@@ -1,8 +1,8 @@
 import { Badge, Col, Stack } from "react-bootstrap";
-import { NoteData, Tag } from "./App";
-import { NoteForm } from "./NoteForm";
-import { useNote } from "./NoteLayout";
-import styles from "./NoteList.module.css";
+import { NoteData, Tag } from "../App";
+import { NoteForm } from "../components/NoteForm";
+import { useNote } from "../layouts/NoteLayout";
+import styles from "../styles/NoteList.module.css";
 
 type EditNoteProps = {
   onSubmit: (id: string, data: NoteData) => void;
@@ -31,6 +31,8 @@ export function EditNote({ onSubmit, onAddTag, availableTags }: EditNoteProps) {
         title={note.title}
         markdown={note.markdown}
         tags={note.tags}
+        longitude={note.longitude}
+        latitude={note.latitude}
         onSubmit={(data) => onSubmit(note.id, data)}
         onAddTag={onAddTag}
         availableTags={availableTags}

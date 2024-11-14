@@ -15,6 +15,13 @@
     font-weight: 590;
 }
 
+.custom-very-small {
+    color: #697076 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px !important;
+    font-weight: 500;
+}
+
 .custom-medium {
     color: #052844 !important;
     font-family: 'Montserrat', sans-serif;
@@ -38,3 +45,15 @@
     background-color: #B6E5FF !important;
     color: #052844 !important;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
