@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 import styles from "../styles/NoteList.module.css";
 import remarkGfm from "remark-gfm";
 import '../styles/Note.css';
-import starsIcon from "../assets/christmas-stars.png";
 
 type NoteProps = {
   onDelete: (id: string) => void;
@@ -77,7 +76,7 @@ export function Note({ onDelete }: NoteProps) {
 
       <Link to={`/${note.id}/edit`}>
         <Button variant="primary custom-button d-flex align-items-center justify-content-center w-100 mt-3">
-          <img src={starsIcon} alt="stars" className="me-2" style={{ width: "20px", height: "20px" }} />
+          <img src="/christmas-stars.png" alt="stars" className="me-2" style={{ width: "20px", height: "20px" }} />
           Selesaikan Dengan AI
         </Button>
       </Link>
