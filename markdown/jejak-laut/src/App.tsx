@@ -9,6 +9,7 @@ import { NoteList } from "./pages/NoteList";
 import { Note } from "./pages/Note";
 import { NoteLayout } from "./layouts/NoteLayout";
 import { EditNote } from "./pages/EditNote";
+import { NoteLokasi } from "./pages/NoteLokasi";
 
 export type Note = {
   id: string;
@@ -124,7 +125,7 @@ function App() {
           }
         />
         <Route
-          path="/new"
+          path="/baru"
           element={
             <NewNote
               onSubmit={onCreateNote}
@@ -136,7 +137,7 @@ function App() {
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
           <Route index element={<Note onDelete={onDeleteNote} />} />
           <Route
-            path="edit"
+            path="ubah"
             element={
               <EditNote
                 onSubmit={onUpdateNote}
@@ -145,6 +146,7 @@ function App() {
               />
             }
           />
+          <Route path="lokasi" element={<NoteLokasi />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

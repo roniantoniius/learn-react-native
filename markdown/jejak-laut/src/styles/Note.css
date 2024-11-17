@@ -36,14 +36,26 @@
 
 .custom-button {
     background-color: #052844 !important;
-    color: #c9ecff !important;
+    color: #cbe9fa !important;
     font-weight: 600;
     font-family: 'Montserrat', sans-serif;
 }
 
 .custom-button:hover {
-    background-color: #B6E5FF !important;
+    background-color: #cbe9fa !important;
     color: #052844 !important;
+}
+
+.custom-button-2 {
+    background-color: #d0facb !important;
+    color: #084405 !important;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.custom-button-2:hover {
+    background-color: #084405 !important;
+    color: #d0facb !important;
 }
 
 table {

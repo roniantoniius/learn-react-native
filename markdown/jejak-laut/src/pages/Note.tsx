@@ -31,7 +31,7 @@ export function Note({ onDelete }: NoteProps) {
         </Col>
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
-            <Link to={`/${note.id}/edit`}>
+            <Link to={`/${note.id}/ubah`}>
               <Button variant="primary custom-button">Ubah</Button>
             </Link>
             <Button
@@ -50,15 +50,12 @@ export function Note({ onDelete }: NoteProps) {
         </Col>
       </Row>
 
-      {/* Garis pembatas horizontal */}
       <hr className={styles.horizontalDivider} />
 
-      {/* Kontainer untuk Markdown dengan jarak di bagian atas */}
       <div className={`${styles.markdownContainer} mt-3`}>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.markdown}</ReactMarkdown>
       </div>
 
-      {/* Longitude and Latitude display boxes */}
       <Row className="mt-3">
         <Col>
           <div className="p-3 border rounded">
@@ -74,10 +71,15 @@ export function Note({ onDelete }: NoteProps) {
         </Col>
       </Row>
 
-      <Link to={`/${note.id}/edit`}>
+      <Link to={`/${note.id}/ubah`} style={{ textDecoration: 'none' }}>
         <Button variant="primary custom-button d-flex align-items-center justify-content-center w-100 mt-3">
           <img src="/christmas-stars.png" alt="stars" className="me-2" style={{ width: "20px", height: "20px" }} />
           Selesaikan Dengan AI
+        </Button>
+      </Link>
+      <Link to={`/${note.id}/lokasi`} style={{ textDecoration: 'none' }}>
+        <Button variant="primary custom-button-2 justify-content-center w-100 mt-3">
+          Periksa Lokasi
         </Button>
       </Link>
     </>

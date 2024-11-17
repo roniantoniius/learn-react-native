@@ -1,14 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  Row,
-  Col,
-  Stack,
-  Button,
-  Form,
-  Card,
-  Badge,
-  Modal,
-} from "react-bootstrap";
+import { Row, Col, Stack, Button, Form, Card, Badge, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Tag } from "../App";
@@ -72,8 +63,8 @@ export function NoteList({
         </Col>
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">
-            <Link to="/new">
-              <Button variant="primary custom-button">Tambah</Button>
+            <Link to="/baru">
+              <Button variant="primary custom-button">Tambah Jejak Baru</Button>
             </Link>
             <Button
               onClick={() => setEditTagsModalIsOpen(true)}
@@ -120,6 +111,45 @@ export function NoteList({
           </Col>
         </Row>
       </Form>
+      <Card className={`h-100 text-reset text-decoration-none ${styles.card} ${styles.guideCard}`}>
+        <Card.Body>
+          <Stack gap={4} className="align-items-center justify-content-center">
+            <span className="fs-5 custom-medium">Panduan Jejak Laut</span>
+            <Row className="g-3 justify-content-center">
+              {/* Bagian 1 */}
+              <Col xs={12} md={4}>
+                <Card className={`text-center ${styles.subCard}`}>
+                  <Card.Body>
+                    <img src="/1.png" alt="Step 1" className={styles.guideImage} />
+                    <p className="custom-medium mt-2">1. Buat Catatan Jejak Baru Kamu!</p>
+                  </Card.Body>
+                </Card>
+              </Col>
+              {/* Bagian 2 */}
+              <Col xs={12} md={4}>
+                <Card className={`text-center ${styles.subCard}`}>
+                  <Card.Body>
+                    <img src="/2.png" alt="Step 2" className={styles.guideImage} />
+                    <p className="custom-medium mt-2">
+                      2. Format Kategori Yang Efisien
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Col>
+              {/* Bagian 3 */}
+              <Col xs={12} md={4}>
+                <Card className={`text-center ${styles.subCard}`}>
+                  <Card.Body>
+                    <img src="/3.png" alt="Step 3" className={styles.guideImage} />
+                    <p className="custom-medium mt-2">3. Gunakan AI Untuk Melengkapi Catatan Jejak Laut Kamu!</p>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Stack>
+        </Card.Body>
+      </Card>
+
       <Row xs={1} sm={2} lg={3} xl={2} className="g-3">
         {filteredNotes.map((note) => (
           <Col key={note.id}>
