@@ -21,17 +21,26 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.markdownContainerLokasi {
+  padding: 2px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: none; 
+  font-size: 0.75rem;
+}
+
 .guideCard {
-  margin-bottom: 2rem; /* Memberikan jarak di bawah card */
+  margin-bottom: 2rem;
 }
 
 .subCard {
-  border: 1px solid #dee2e6; /* Memberikan border */
-  border-radius: 8px; /* Membuat sudut membulat */
-  padding: 0rem; /* Memberikan padding di dalam subCard */
+  border: 1px solid #dee2e6; 
+  border-radius: 8px;
+  padding: 0rem;
 }
 
 .guideImage {
-  width: 200px; /* Ukuran gambar default */
+  width: 200px;
   height: auto;
 }

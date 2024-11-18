@@ -43,9 +43,7 @@ export function Note({ onDelete }: NoteProps) {
             >
               Hapus
             </Button>
-            <Link to="/">
-              <Button variant="outline-secondary text">Kembali</Button>
-            </Link>
+            <Button variant="outline-secondary text" onClick={() => history.back()}>Kembali</Button>
           </Stack>
         </Col>
       </Row>

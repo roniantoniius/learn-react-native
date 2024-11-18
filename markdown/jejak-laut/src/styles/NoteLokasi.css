@@ -1,31 +1,42 @@
-.map-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-  }
-  
-  .info-card {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 400px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .show-details-button {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
+.note-lokasi-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+}
+
+.note-lokasi-card {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1000px;
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.note-lokasi-card.hidden {
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
+}
+
+.note-lokasi-card.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.accordion-toggle {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  z-index: 1001;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
