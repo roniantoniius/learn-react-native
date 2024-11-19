@@ -8,6 +8,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styles from "../styles/NoteList.module.css";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import axios from "axios";
+import polyline from "@mapbox/polyline";
 
 type Location = {
     latitude: number;
@@ -37,23 +39,40 @@ export function NoteLokasi() {
     const [userLocation, setUserLocation] = useState<Location | null>(null);
     const [distance, setDistance] = useState<string | null>(null);
     const [isCardVisible, setIsCardVisible] = useState(true);
+    const [isMinimized, setIsMinimized] = useState(false);
+    const [optimizedRoute, setOptimizedRoute] = useState<[number, number][]>([]);
+
+    const fetchRoute = async (start: Location, end: Location) => {
+        try {
+            const response = await axios.get(
+                `https://router.project-osrm.org/route/v1/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=polyline`
+            );
+            const route = response.data.routes[0];
+            const decodedRoute: [number, number][] = polyline.decode(route.geometry).map(([lat, lng]: [number, number]) => [lat, lng]);
+            setOptimizedRoute(decodedRoute);
+        } catch (error) {
+            console.error("Error saat mengambil rute: ", error);
+        }
+    };
 
     // Mendapatkan lokasi user saat ini
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    setUserLocation({
+                    const location = {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
-                    });
+                    };
+                    setUserLocation(location);
+                    fetchRoute(location, { latitude: note.latitude, longitude: note.longitude });
                 },
                 (error) => {
                     console.error("Error mendapat lokasi: ", error);
                 }
             );
         }
-    }, []);
+    }, [note.latitude, note.longitude]);
 
     // Menghitung jarak antara userLocation dan note
     useEffect(() => {
@@ -78,12 +97,21 @@ export function NoteLokasi() {
 
     const toggleCardVisibility = () => {
         setIsCardVisible((prev) => !prev);
-    }
+        if (isCardVisible) {
+            setIsCardVisible(false);
+            setIsMinimized(true);
+        } else if (isMinimized) {
+            setIsCardVisible(true);
+            setIsMinimized(false);
+        } else {
+            setIsCardVisible(true);
+        }
+    };
 
     return (
         <div className="note-lokasi-container">
             <MapContainer 
-                center={[note.latitude, note.longitude]}
+                center={userLocation ? [userLocation.latitude, userLocation.longitude] : [note.latitude, note.longitude]}
                 zoom={13}
                 style={{ height: "100vh", width: "100%" }}
             >
@@ -100,35 +128,14 @@ export function NoteLokasi() {
                 <Marker position={[note.latitude, note.longitude]}>
                     <Popup>Lokasi Catatan Jejak Laut</Popup>
                 </Marker>
-                {userLocation && (
-                    <Polyline 
-                        positions={[
-                            [userLocation.latitude, userLocation.longitude],
-                            [note.latitude, note.longitude],
-                        ]} 
-                        color="blue"
-                    />
+                {optimizedRoute.length > 0 && (
+                    <Polyline positions={optimizedRoute} color="blue" />
                 )}
             </MapContainer>
-            <div className={`note-lokasi-card ${isCardVisible ? "visible" : "hidden"}`}>
+            <div className={`note-lokasi-card ${isCardVisible ? "visible" : isMinimized ? "minimized" : "hidden"}`}>
                 <Card>
                     <Card.Body>
                         <Row>
-                            <Col>
-                                <div className="d-flex">
-                                    <h1 className="custom-medium-small me-2">{note.title}</h1>
-                                    {userLocation && <h1 className="custom-medium-small me-2">| {distance}</h1>}
-                                </div>
-                                {note.tags.length > 0 && (
-                                    <Stack gap={1} direction="horizontal" className="flex-wrap">
-                                        {note.tags.map((tag) => (
-                                            <Badge key={tag.id} className="text-truncate custom-tag">
-                                                {tag.label}
-                                            </Badge>
-                                        ))}
-                                    </Stack>
-                                )}
-                            </Col>
                             <Col xs="auto">
                                 <Button
                                     className="accordion-toggle"
@@ -138,15 +145,66 @@ export function NoteLokasi() {
                                     {isCardVisible ? <FaChevronDown /> : <FaChevronUp />}
                                 </Button>
                             </Col>
-                            <Col xs="auto">
-                                <Button variant="outline-secondary text" onClick={() => history.back()}>Kembali</Button>
-                            </Col>
                         </Row>
-                        <hr className={styles.horizontalDivider} />
-                        <div className={`${styles.markdownContainerLokasi} mt-3`}>
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.markdown}</ReactMarkdown>
-                        </div>
                     </Card.Body>
+                    {isMinimized ? (
+                        <div className="content-wrapper">
+                            <Row>
+                                <Col>
+                                    <div className="d-flex">
+                                        <h1 className="custom-medium-small me-2">{note.title}</h1>
+                                        {userLocation && (
+                                            <h1 className="custom-medium-small me-2">| {distance}</h1>
+                                        )}
+                                    </div>
+                                    {note.tags.length > 0 && (
+                                            <Stack gap={1} direction="horizontal" className="flex-wrap">
+                                                {note.tags.map((tag) => (
+                                                    <Badge key={tag.id} className="text-truncate custom-tag">
+                                                        {tag.label}
+                                                    </Badge>
+                                                ))}
+                                            </Stack>
+                                    )}
+                                </Col>
+                                <Col xs="auto">
+                                    <Button
+                                        variant="outline-secondary text"
+                                        onClick={() => history.back()}
+                                    >
+                                        Kembali
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </div>
+                    ) : (
+                        <Card.Body>
+                            <Row>
+                                <Col>
+                                    <div className="d-flex">
+                                        <h1 className="custom-medium-small me-2">{note.title}</h1>
+                                        {userLocation && <h1 className="custom-medium-small me-2">| {distance}</h1>}
+                                    </div>
+                                    {note.tags.length > 0 && (
+                                        <Stack gap={1} direction="horizontal" className="flex-wrap">
+                                            {note.tags.map((tag) => (
+                                                <Badge key={tag.id} className="text-truncate custom-tag">
+                                                    {tag.label}
+                                                </Badge>
+                                            ))}
+                                        </Stack>
+                                    )}
+                                </Col>
+                                <Col xs="auto">
+                                    <Button variant="outline-secondary text" onClick={() => history.back()}>Kembali</Button>
+                                </Col>
+                            </Row>
+                            <hr className={styles.horizontalDivider} />
+                            <div className={`${styles.markdownContainerLokasi} mt-3`}>
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.markdown}</ReactMarkdown>
+                            </div>
+                        </Card.Body>
+                    )}
                 </Card>
             </div>
         </div>

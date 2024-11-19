@@ -17,6 +17,7 @@ export function Note({ onDelete }: NoteProps) {
   return (
     <>
       <Row className="align-items-center mb-4">
+        <img src="/dark-nobg.svg" alt="Logo" style={{ width: '85px', height: '60px' }} />
         <Col>
           <h1 className="custom-medium">{note.title}</h1>
           {note.tags.length > 0 && (
@@ -43,43 +44,51 @@ export function Note({ onDelete }: NoteProps) {
             >
               Hapus
             </Button>
-            <Button variant="outline-secondary text" onClick={() => history.back()}>Kembali</Button>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <Button variant="outline-secondary text">Kembali</Button>
+            </Link>
           </Stack>
         </Col>
       </Row>
 
       <hr className={styles.horizontalDivider} />
 
-      <div className={`${styles.markdownContainer} mt-3`}>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.markdown}</ReactMarkdown>
-      </div>
-
       <Row className="mt-3">
         <Col>
-          <div className="p-3 border rounded">
+          <div className={`${styles.markdownContainer} mt-3 mb-3`}>
             <h5>Latitude</h5>
             <p>{note.latitude}</p>
           </div>
         </Col>
         <Col>
-          <div className="p-3 border rounded">
+          <div className={`${styles.markdownContainer} mt-3`}>
             <h5>Longitude</h5>
             <p>{note.longitude}</p>
           </div>
         </Col>
       </Row>
 
-      <Link to={`/${note.id}/ubah`} style={{ textDecoration: 'none' }}>
-        <Button variant="primary custom-button d-flex align-items-center justify-content-center w-100 mt-3">
-          <img src="/christmas-stars.png" alt="stars" className="me-2" style={{ width: "20px", height: "20px" }} />
-          Selesaikan Dengan AI
-        </Button>
-      </Link>
-      <Link to={`/${note.id}/lokasi`} style={{ textDecoration: 'none' }}>
-        <Button variant="primary custom-button-2 justify-content-center w-100 mt-3">
-          Periksa Lokasi
-        </Button>
-      </Link>
+      <div className={`${styles.markdownContainer} mt-3 mb-4`}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.markdown}</ReactMarkdown>
+      </div>
+
+      <div className="d-flex align-items-center mt-3">
+      <div className="flex-grow-1 me-2">
+        <Link to={`/${note.id}/ubah`} style={{ textDecoration: 'none' }}>
+          <Button variant="primary custom-button d-flex align-items-center justify-content-center w-100">
+            <img src="/christmas-stars.png" alt="stars" className="me-2" style={{ width: "20px", height: "20px" }} />
+            Selesaikan Dengan AI
+          </Button>
+        </Link>
+      </div>
+      <div>
+        <Link to={`/${note.id}/lokasi`} style={{ textDecoration: 'none' }}>
+          <Button variant="primary custom-button-2 text w-100">
+            Periksa Lokasi
+          </Button>
+        </Link>
+      </div>
+    </div>
     </>
   );
 }

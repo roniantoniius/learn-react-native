@@ -55,15 +55,15 @@
 }
 
 .custom-button-2 {
-    background-color: #d0facb !important;
-    color: #084405 !important;
+    background-color: #cbe9fa !important;
+    color: #052844 !important;
     font-weight: 600;
     font-family: 'Montserrat', sans-serif;
 }
 
 .custom-button-2:hover {
-    background-color: #084405 !important;
-    color: #d0facb !important;
+    background-color: #052844 !important;
+    color: #cbe9fa !important;
 }
 
 table {
