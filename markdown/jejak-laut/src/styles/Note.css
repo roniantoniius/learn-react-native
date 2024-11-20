@@ -36,6 +36,13 @@
     font-weight: bold;
 }
 
+.custom-medium-small-2 {
+    color: #052844 !important;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px !important;
+    font-weight: bold;
+}
+
 .custom-judul {
     color: #052844 !important;
     font-family: 'Montserrat', sans-serif;

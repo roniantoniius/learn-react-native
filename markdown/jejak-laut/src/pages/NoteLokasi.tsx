@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNote } from "../layouts/NoteLayout";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap, LayersControl } from "react-leaflet";
 import { Button, Card, Col, Row, Stack, Badge, } from "react-bootstrap";
 import "../styles/NoteLokasi.css";
 import "leaflet/dist/leaflet.css";
@@ -10,6 +10,7 @@ import styles from "../styles/NoteList.module.css";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 import polyline from "@mapbox/polyline";
+import L from "leaflet";
 
 type Location = {
     latitude: number;
@@ -41,7 +42,26 @@ export function NoteLokasi() {
     const [isCardVisible, setIsCardVisible] = useState(true);
     const [isMinimized, setIsMinimized] = useState(false);
     const [optimizedRoute, setOptimizedRoute] = useState<[number, number][]>([]);
+    const [userAddress, setUserAddress] = useState<string | null>(null);
+    const [noteAddress, setNoteAddress] = useState<string | null>(null);
 
+    const redIcon = new L.Icon({
+        iconUrl: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png",
+        iconSize: [25, 41], // Ukuran ikon
+        iconAnchor: [12, 41], // Posisi anchor
+        popupAnchor: [1, -34], // Posisi popup
+        shadowSize: [41, 41], // Ukuran bayangan
+    });
+    
+
+    // untuk mengambil rute terpendek dari userLocation ke note
+
+    // selain driving itu adaa juga walking, cycling, dan driving-traffic
+
+    // cara ganti warna rute: tambahkan parameter color pada Polyline
+
+    // cara ganti tipe peta dengan mapstyle
     const fetchRoute = async (start: Location, end: Location) => {
         try {
             const response = await axios.get(
@@ -52,6 +72,24 @@ export function NoteLokasi() {
             setOptimizedRoute(decodedRoute);
         } catch (error) {
             console.error("Error saat mengambil rute: ", error);
+        }
+    };
+
+    const fetchAddy = async (latitude: number, longitude: number) => {
+        try {
+            const response = await axios.get("https://nominatim.openstreetmap.org/reverse", {
+                params: {
+                    lat: latitude,
+                    lon: longitude,
+                    format: "json",
+                },
+            });
+
+            const addy = response.data.display_name;
+            return addy;
+        } catch (error) {
+            console.error("Error saat mengambil alamat: ", error);
+            return null;
         }
     };
 
@@ -95,6 +133,20 @@ export function NoteLokasi() {
         }
     }, [userLocation, note.latitude, note.longitude]);
 
+    useEffect(() => {
+        if (userLocation) {
+            fetchAddy(userLocation.latitude, userLocation.longitude).then((addy) => {
+                setUserAddress(addy);
+            });
+        }
+    }, [userLocation]);
+
+    useEffect(() => {
+        fetchAddy(note.latitude, note.longitude).then((addy) => {
+            setNoteAddress(addy);
+        });
+    }, [note.latitude, note.longitude]);
+
     const toggleCardVisibility = () => {
         setIsCardVisible((prev) => !prev);
         if (isCardVisible) {
@@ -115,18 +167,50 @@ export function NoteLokasi() {
                 zoom={13}
                 style={{ height: "100vh", width: "100%" }}
             >
-                <TileLayer 
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
+                <LayersControl position="topright">
+                    <LayersControl.BaseLayer name="Default">
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer checked name="CartoDB Positron">
+                        <TileLayer
+                            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+                        />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="Esri World Imagery">
+                        <TileLayer
+                            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                            attribution='Tiles &copy; Esri &mdash; Source: Esri, Airbus DS, USGS, NGA, NASA, CGIAR, NCI, USDA FSA, USGS, AeroGRID, IGN, and the GIS User Community'
+                        />
+                    </LayersControl.BaseLayer>
+                </LayersControl>
                 {userLocation && <MapFocus userLocation={userLocation} />}
                 {userLocation && (
-                    <Marker position={[userLocation.latitude, userLocation.longitude]}>
-                        <Popup>Lokasi Kamu!</Popup>
+                    <Marker position={[userLocation.latitude, userLocation.longitude]} icon={redIcon}>
+                        <Popup>
+                            <div>
+                                <p><strong>Lokasi Kamu Saat Ini!</strong></p>
+                                <p><strong>Koordinat</strong></p>
+                                <p>{userLocation.latitude}, {userLocation.longitude}</p>
+                                <p><strong>Alamat:</strong></p>
+                                <p>{userAddress || "Lagi cari alamatnya nih..."}</p>
+                            </div>
+                        </Popup>
                     </Marker>
                 )}
                 <Marker position={[note.latitude, note.longitude]}>
-                    <Popup>Lokasi Catatan Jejak Laut</Popup>
+                    <Popup>
+                        <div>
+                            <h5 className="custom-medium-small-2">Lokasi Catatan {note.title}</h5>
+                            <p><strong>Koordinat</strong></p>
+                            <p>{note.latitude}, {note.longitude}</p>
+                            <p><strong>Alamat:</strong></p>
+                            <p>{noteAddress || "Lagi cari alamatnya nih..."}</p>
+                        </div>
+                    </Popup>
                 </Marker>
                 {optimizedRoute.length > 0 && (
                     <Polyline positions={optimizedRoute} color="blue" />
