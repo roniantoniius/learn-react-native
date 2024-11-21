@@ -10,6 +10,7 @@ import { Note } from "./pages/Note";
 import { NoteLayout } from "./layouts/NoteLayout";
 import { EditNote } from "./pages/EditNote";
 import { NoteLokasi } from "./pages/NoteLokasi";
+import { PickLocation } from "./pages/PickLocation";
 
 export type Note = {
   id: string;
@@ -148,6 +149,7 @@ function App() {
           />
           <Route path="lokasi" element={<NoteLokasi />} />
         </Route>
+        <Route path="/pilihlokasi" element={<PickLocation />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Container>

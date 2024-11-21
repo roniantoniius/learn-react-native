@@ -69,3 +69,18 @@
 .note-lokasi-card .content-wrapper .btn {
   padding: 5px 15px;
 }
+.pick-location-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.pick-location-actions {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}

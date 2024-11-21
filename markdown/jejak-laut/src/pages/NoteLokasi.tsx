@@ -54,14 +54,6 @@ export function NoteLokasi() {
         shadowSize: [41, 41], // Ukuran bayangan
     });
     
-
-    // untuk mengambil rute terpendek dari userLocation ke note
-
-    // selain driving itu adaa juga walking, cycling, dan driving-traffic
-
-    // cara ganti warna rute: tambahkan parameter color pada Polyline
-
-    // cara ganti tipe peta dengan mapstyle
     const fetchRoute = async (start: Location, end: Location) => {
         try {
             const response = await axios.get(

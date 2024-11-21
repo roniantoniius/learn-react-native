@@ -24,9 +24,11 @@ export function NoteForm({
 }: NoteFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const longitudeRef = useRef<HTMLInputElement>(null);
-  const latitudeRef = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
+
+  // Local states for latitude and longitude
+  const [lat, setLat] = useState<number>(latitude);
+  const [lng, setLng] = useState<number>(longitude);
   const navigate = useNavigate();
 
   function handleSubmit(e: FormEvent) {
@@ -36,8 +38,8 @@ export function NoteForm({
       title: titleRef.current!.value,
       markdown: markdownRef.current!.value,
       tags: selectedTags,
-      longitude: parseFloat(longitudeRef.current!.value),
-      latitude: parseFloat(latitudeRef.current!.value),
+      longitude: lng,
+      latitude: lat,
     });
 
     navigate("..");
@@ -56,23 +58,27 @@ export function NoteForm({
           <Col>
             <Form.Group controlId="tags">
               <Form.Label className="custom-small">Kategori</Form.Label>
-              <CreatableReactSelect className="text"
+              <CreatableReactSelect
+                className="text"
                 onCreateOption={(label) => {
                   const newTag = { id: uuidV4(), label };
                   onAddTag(newTag);
                   setSelectedTags((prev) => [...prev, newTag]);
                 }}
-                value={selectedTags.map((tag) => {
-                  return { label: tag.label, value: tag.id };
-                })}
-                options={availableTags.map((tag) => {
-                  return { label: tag.label, value: tag.id };
-                })}
+                value={selectedTags.map((tag) => ({
+                  label: tag.label,
+                  value: tag.id,
+                }))}
+                options={availableTags.map((tag) => ({
+                  label: tag.label,
+                  value: tag.id,
+                }))}
                 onChange={(tags) => {
                   setSelectedTags(
-                    tags.map((tag) => {
-                      return { label: tag.label, id: tag.value };
-                    })
+                    tags.map((tag) => ({
+                      label: tag.label,
+                      id: tag.value,
+                    }))
                   );
                 }}
                 isMulti
@@ -83,7 +89,8 @@ export function NoteForm({
         <Col>
           <Form.Group controlId="markdown" className="mb-3">
             <Form.Label className="text custom-small">Badan Catatan</Form.Label>
-            <Form.Control className="text"
+            <Form.Control
+              className="text"
               defaultValue={markdown}
               required
               as="textarea"
@@ -91,6 +98,32 @@ export function NoteForm({
               rows={15}
             />
           </Form.Group>
+        </Col>
+        <Row>
+          <Col>
+            <Form.Group controlId="latitude">
+              <Form.Label>Latitude</Form.Label>
+              <Form.Control
+                type="number"
+                step="any"
+                value={lat}
+                onChange={(e) => setLat(parseFloat(e.target.value))}
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="longitude">
+              <Form.Label>Longitude</Form.Label>
+              <Form.Control
+                type="number"
+                step="any"
+                value={lng}
+                onChange={(e) => setLng(parseFloat(e.target.value))}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
           <Stack direction="horizontal" gap={2} className="justify-content-end mt-3">
             <Button type="submit" variant="primary custom-button">
               Simpan
@@ -101,30 +134,6 @@ export function NoteForm({
               </Button>
             </Link>
           </Stack>
-        </Col>
-        <Row>
-          <Col>
-            <Form.Group controlId="latitude">
-              <Form.Label>Latitude</Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                ref={latitudeRef}
-                defaultValue={latitude}
-              />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="longitude">
-              <Form.Label>Longitude</Form.Label>
-              <Form.Control
-                type="number"
-                step="any"
-                ref={longitudeRef}
-                defaultValue={longitude}
-              />
-            </Form.Group>
-          </Col>
         </Row>
       </Stack>
     </Form>

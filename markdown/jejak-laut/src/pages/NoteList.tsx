@@ -1,30 +1,17 @@
 import { useMemo, useState } from "react";
-import { Row, Col, Stack, Button, Form, Card, Badge, Modal } from "react-bootstrap";
+import { Row, Col, Stack, Button, Form, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Tag } from "../App";
 import styles from "../styles/NoteList.module.css";
 import '../styles/Note.css';
-
-type SimplifiedNote = {
-  tags: Tag[];
-  title: string;
-  id: string;
-  longitude: number;
-  latitude: number;
-};
+import { GuideStep } from "../components/GuideStep";
+import { EditTagsModal } from "../components/EditTagsModel";
+import { NoteCard, SimplifiedNote } from "../components/NoteCard";
 
 type NoteListProps = {
   availableTags: Tag[];
   notes: SimplifiedNote[];
-  onDeleteTag: (id: string) => void;
-  onUpdateTag: (id: string, label: string) => void;
-};
-
-type EditTagsModalProps = {
-  show: boolean;
-  availableTags: Tag[];
-  handleClose: () => void;
   onDeleteTag: (id: string) => void;
   onUpdateTag: (id: string, label: string) => void;
 };
@@ -116,35 +103,9 @@ export function NoteList({
           <Stack gap={4} className="align-items-center justify-content-center">
             <span className="fs-5 custom-medium">Panduan Jejak Laut</span>
             <Row className="g-3 justify-content-center">
-              {/* Bagian 1 */}
-              <Col xs={12} md={4}>
-                <Card className={`text-center ${styles.subCard}`}>
-                  <Card.Body>
-                    <img src="/1.png" alt="Step 1" className={styles.guideImage} />
-                    <p className="custom-medium mt-2">1. Buat Catatan Jejak Baru Kamu!</p>
-                  </Card.Body>
-                </Card>
-              </Col>
-              {/* Bagian 2 */}
-              <Col xs={12} md={4}>
-                <Card className={`text-center ${styles.subCard}`}>
-                  <Card.Body>
-                    <img src="/2.png" alt="Step 2" className={styles.guideImage} />
-                    <p className="custom-medium mt-2">
-                      2. Format Kategori Yang Efisien
-                    </p>
-                  </Card.Body>
-                </Card>
-              </Col>
-              {/* Bagian 3 */}
-              <Col xs={12} md={4}>
-                <Card className={`text-center ${styles.subCard}`}>
-                  <Card.Body>
-                    <img src="/3.png" alt="Step 3" className={styles.guideImage} />
-                    <p className="custom-medium mt-2">3. Gunakan AI Untuk Melengkapi Catatan Jejak Laut Kamu!</p>
-                  </Card.Body>
-                </Card>
-              </Col>
+              <GuideStep stepNumber={1} imageSrc="/1.png" description="Buat Catatan Jejak Baru Kamu!" />
+              <GuideStep stepNumber={2} imageSrc="/2.png" description="Format Kategori Yang Efisien" />
+              <GuideStep stepNumber={3} imageSrc="/3.png" description="Gunakan AI Untuk Melengkapi Catatan Jejak Laut Kamu!" />
             </Row>
           </Stack>
         </Card.Body>
@@ -165,81 +126,5 @@ export function NoteList({
         availableTags={availableTags}
       />
     </>
-  );
-}
-
-function NoteCard({ id, title, tags, longitude, latitude }: SimplifiedNote) {
-  return (
-    <Card
-      as={Link}
-      to={`/${id}`}
-      className={`h-100 text-reset text-decoration-none ${styles.card}`}
-    >
-      <Card.Body>
-        <Stack
-          gap={2}
-          className="align-items-center justify-content-center h-100"
-        >
-          <span className="fs-5 custom-medium">{title}</span>
-          {tags.length > 0 && (
-            <><Stack
-              gap={2}
-              direction="horizontal"
-              className="justify-content-center flex-wrap"
-            >
-              {tags.map((tag) => (
-                <Badge key={tag.id} className="custom-tag text-truncate">
-                  {" "}
-                  {tag.label}
-                </Badge>
-              ))}
-            </Stack>
-                <h5 className="fs-5 custom-very-small">{latitude}, {longitude}</h5>
-              </>
-          )}
-        </Stack>
-      </Card.Body>
-    </Card>
-  );
-}
-
-function EditTagsModal({
-  availableTags,
-  handleClose,
-  show,
-  onDeleteTag,
-  onUpdateTag,
-}: EditTagsModalProps) {
-  return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title className="custom-text-color custom-medium">Ubah Kategori</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Stack gap={2}>
-            {availableTags.map((tag) => (
-              <Row key={tag.id}>
-                <Col>
-                  <Form.Control
-                    type="text"
-                    value={tag.label}
-                    onChange={(e) => onUpdateTag(tag.id, e.target.value)}
-                  />
-                </Col>
-                <Col xs="auto">
-                  <Button
-                    onClick={() => onDeleteTag(tag.id)}
-                    variant="outline-danger"
-                  >
-                    &times;
-                  </Button>
-                </Col>
-              </Row>
-            ))}
-          </Stack>
-        </Form>
-      </Modal.Body>
-    </Modal>
   );
 }
