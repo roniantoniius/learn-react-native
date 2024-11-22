@@ -3,8 +3,9 @@ import { NoteData, Tag } from "../App";
 import { NoteForm } from "../components/NoteForm";
 import styles from "../styles/NoteList.module.css";
 import '../styles/Note.css';
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useEffect } from "react";
 
 type NewNoteProps = {
   onSubmit: (data: NoteData) => void;
@@ -13,20 +14,24 @@ type NewNoteProps = {
 };
 
 export function NewNote({ onSubmit, onAddTag, availableTags }: NewNoteProps) {
-  const [selectedLat, setSelectedLat] = useState(0);
-  const [selectedLng, setSelectedLng] = useState(0);
   const navigate = useNavigate();
+  
+  // Use local storage for latitude and longitude
+  const [selectedLat, setSelectedLat] = useLocalStorage<number | null>("selectedLatitude", null);
+  const [selectedLng, setSelectedLng] = useLocalStorage<number | null>("selectedLongitude", null);
 
+  // Effect to retrieve stored latitude and longitude from local storage
   useEffect(() => {
-    const savedLatitude = localStorage.getItem("selectedLatitude");
-    const savedLongitude = localStorage.getItem("selectedLongitude");
-    if (savedLatitude && savedLongitude) {
-      setSelectedLat(JSON.parse(savedLatitude));
-      setSelectedLng(JSON.parse(savedLongitude));
-      localStorage.removeItem("selectedLatitude");
-      localStorage.removeItem("selectedLongitude");
+    const storedLatitude = localStorage.getItem("selectedLatitude");
+    const storedLongitude = localStorage.getItem("selectedLongitude");
+
+    if (storedLatitude) {
+      setSelectedLat(JSON.parse(storedLatitude));
     }
-  }, []);
+    if (storedLongitude) {
+      setSelectedLng(JSON.parse(storedLongitude));
+    }
+  }, [setSelectedLat, setSelectedLng]);
 
   return (
     <>
@@ -42,16 +47,11 @@ export function NewNote({ onSubmit, onAddTag, availableTags }: NewNoteProps) {
         onSubmit={onSubmit}
         onAddTag={onAddTag}
         availableTags={availableTags}
-        latitude={selectedLat}
-        longitude={selectedLng}
+        latitude={selectedLat || 0}
+        longitude={selectedLng || 0}
       />
       <div className="mb-3">
-        <Button variant="outline-primary" onClick={() => navigate("/pilihlokasi")}>Pilih lokasi di Peta</Button>
-        {selectedLat !== 0 && selectedLng !== 0 && (
-          <div className="mt-2">
-            <strong>Lokasi: </strong> {selectedLat.toFixed(4)}, {selectedLng.toFixed(4)}
-          </div>
-        )}
+        <Button variant="outline-danger text" onClick={() => navigate("/pilihlokasi")}>Pilih lokasi di Peta</Button>
       </div>
     </>
   );

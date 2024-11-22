@@ -33,7 +33,7 @@ export function PickLocation() {
       // Simpan lokasi ke local storage dengan nama yang spesifik
       localStorage.setItem("selectedLatitude", JSON.stringify(position[0]));
       localStorage.setItem("selectedLongitude", JSON.stringify(position[1]));
-      navigate("/baru"); // Redirect back to the NewNote page
+      navigate("/baru", { state: { latitude: position[0], longitude: position[1] } }); // Redirect back to the NewNote page
     } else {
       alert("Silakan pilih lokasi terlebih dahulu!");
     }
