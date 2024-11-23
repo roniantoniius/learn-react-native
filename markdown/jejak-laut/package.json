@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
+    "@nlux/core": "^2.17.1",
+    "@nlux/langchain": "^2.17.1",
     "@react-google-maps/api": "^2.20.3",
     "@types/leaflet": "^1.9.14",
     "axios": "^1.7.7",
